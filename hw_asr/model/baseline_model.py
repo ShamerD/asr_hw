@@ -36,7 +36,9 @@ class BaselineLSTM(BaseModel):
         self.fc = nn.Linear(hidden_size, n_class, *args, **kwargs)
 
     def forward(self, spectrogram, *args, **kwargs):
-        return {"logits": self.fc(self.lstm(spectrogram))}
+        output, _ = self.lstm(spectrogram)
+        output = self.fc(output)
+        return {"logits": output}
 
     def transform_input_lengths(self, input_lengths):
         return input_lengths  # we don't reduce time dimension here
