@@ -11,6 +11,7 @@ speechbrain~=0.5.9
 torchaudio~=0.9.1
 torch_audiomentations
 
+pillow
 tqdm
 tensorboard
 matplotlib
