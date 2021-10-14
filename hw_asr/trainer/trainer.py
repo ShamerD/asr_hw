@@ -86,6 +86,8 @@ class Trainer(BaseTrainer):
         for batch_idx, batch in enumerate(
                 tqdm(self.data_loader, desc="train", total=self.len_epoch)
         ):
+            if batch_idx >= self.len_epoch:
+                break
             try:
                 batch = self.process_batch(
                     batch,
@@ -116,8 +118,7 @@ class Trainer(BaseTrainer):
                 self._log_predictions(part="train", **batch)
                 self._log_spectrogram(batch["spectrogram"])
                 self._log_scalars(self.train_metrics)
-            if batch_idx >= self.len_epoch:
-                break
+
         log = self.train_metrics.result()
 
         if self.do_validation:
