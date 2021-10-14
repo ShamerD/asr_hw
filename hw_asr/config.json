@@ -14,10 +14,11 @@
     "spectrogram": []
   },
   "arch": {
-    "type": "BaselineModel",
+    "type": "BaselineLSTM",
     "args": {
       "n_feats": 128,
-      "fc_hidden": 512
+      "hidden_size": 256,
+      "num_layers": 2
     }
   },
   "data": {
