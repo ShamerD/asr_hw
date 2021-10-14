@@ -38,4 +38,6 @@ class TestDataloader(unittest.TestCase):
         bs = len(batch["text"])
         self.assertEqual(bs, BS)
 
+        print(batch)
+
         return batch

@@ -18,7 +18,6 @@ class CTCCharTextEncoder(CharTextEncoder):
         self.char2ind = {v: k for k, v in self.ind2char.items()}
 
     def ctc_decode(self, indices: List[int]) -> str:
-        # Possibly can be made more effective (without pure python cycle)
         result = ""
         last_ind = -1
 
