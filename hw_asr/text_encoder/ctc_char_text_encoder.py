@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import torch
 
@@ -17,9 +17,12 @@ class CTCCharTextEncoder(CharTextEncoder):
             self.ind2char[max(self.ind2char.keys()) + 1] = text
         self.char2ind = {v: k for k, v in self.ind2char.items()}
 
-    def ctc_decode(self, indices: List[int]) -> str:
+    def ctc_decode(self, indices: Union[List[int], torch.Tensor]) -> str:
         result = ""
         last_ind = -1
+
+        if type(indices) is torch.Tensor:
+            indices = indices.tolist()
 
         for ind in indices:
             if ind == last_ind:
