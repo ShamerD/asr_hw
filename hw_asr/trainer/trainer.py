@@ -222,10 +222,10 @@ class Trainer(BaseTrainer):
                 f"true: '{target}' | pred: '{pred}' "
                 f"| wer: {wer:.2f} | cer: {cer:.2f}"
             )
-            to_log_pred_raw.append(f"true: '{target}' | pred: '{raw_pred}'\n")
-        self.writer.add_text(f"predictions", "< < < < > > > >".join(to_log_pred))
+            to_log_pred_raw.append(f"true: '{target}' | pred: '{raw_pred}'")
+        self.writer.add_text(f"predictions", "\n".join(to_log_pred))
         self.writer.add_text(
-            f"predictions_raw", "< < < < > > > >".join(to_log_pred_raw)
+            f"predictions_raw", "\n".join(to_log_pred_raw)
         )
 
     def _log_spectrogram(self, spectrogram_batch):
