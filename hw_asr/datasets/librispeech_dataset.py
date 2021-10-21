@@ -9,6 +9,7 @@ from speechbrain.utils.data_utils import download_file
 from tqdm import tqdm
 
 from hw_asr.base.base_dataset import BaseDataset
+from hw_asr.base.base_text_encoder import BaseTextEncoder
 from hw_asr.text_encoder.ctc_char_text_encoder import CTCCharTextEncoder
 from hw_asr.utils import ROOT_PATH
 from hw_asr.utils.parse_config import ConfigParser
@@ -88,7 +89,7 @@ class LibrispeechDataset(BaseDataset):
                     index.append(
                         {
                             "path": str(flac_path.absolute().resolve()),
-                            "text": f_text.lower(),
+                            "text": BaseTextEncoder.normalize_text(f_text),
                             "audio_len": length,
                         }
                     )

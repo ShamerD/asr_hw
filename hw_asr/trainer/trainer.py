@@ -86,6 +86,8 @@ class Trainer(BaseTrainer):
         for batch_idx, batch in enumerate(
                 tqdm(self.data_loader, desc="train", total=self.len_epoch)
         ):
+            if batch_idx >= self.len_epoch:
+                break
             try:
                 batch = self.process_batch(
                     batch,
@@ -116,8 +118,7 @@ class Trainer(BaseTrainer):
                 self._log_predictions(part="train", **batch)
                 self._log_spectrogram(batch["spectrogram"])
                 self._log_scalars(self.train_metrics)
-            if batch_idx >= self.len_epoch:
-                break
+
         log = self.train_metrics.result()
 
         if self.do_validation:
@@ -223,10 +224,10 @@ class Trainer(BaseTrainer):
                 f"true: '{target}' | pred: '{pred}' "
                 f"| wer: {wer:.2f} | cer: {cer:.2f}"
             )
-            to_log_pred_raw.append(f"true: '{target}' | pred: '{raw_pred}'\n")
-        self.writer.add_text(f"predictions", "< < < < > > > >".join(to_log_pred))
+            to_log_pred_raw.append(f"true: '{target}' | pred: '{raw_pred}'")
+        self.writer.add_text(f"predictions", "\n".join(to_log_pred))
         self.writer.add_text(
-            f"predictions_raw", "< < < < > > > >".join(to_log_pred_raw)
+            f"predictions_raw", "\n".join(to_log_pred_raw)
         )
 
     def _log_spectrogram(self, spectrogram_batch):

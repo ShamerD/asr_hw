@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import torch
 
@@ -17,9 +17,24 @@ class CTCCharTextEncoder(CharTextEncoder):
             self.ind2char[max(self.ind2char.keys()) + 1] = text
         self.char2ind = {v: k for k, v in self.ind2char.items()}
 
-    def ctc_decode(self, inds: List[int]) -> str:
-        # TODO: your code here
-        raise NotImplementedError()
+    def ctc_decode(self, indices: Union[List[int], torch.Tensor]) -> str:
+        result = ""
+        last_ind = -1
+
+        if type(indices) is torch.Tensor:
+            indices = indices.tolist()
+
+        for ind in indices:
+            if ind == last_ind:
+                continue
+            if ind == self.char2ind[self.EMPTY_TOK]:
+                last_ind = -1
+                continue
+            result += self.ind2char[ind]
+            last_ind = ind
+
+        return result
+
 
     def ctc_beam_search(self, probs: torch.tensor, probs_length,
                         beam_size: int = 100) -> List[Tuple[str, float]]:
