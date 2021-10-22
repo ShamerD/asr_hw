@@ -57,6 +57,9 @@ def main(config, out_file):
             )
             batch["probs"] = batch["log_probs"].exp().cpu()
             batch["argmax"] = batch["probs"].argmax(-1)
+            batch["beam_search_results"] = text_encoder.ctc_beam_search(
+                batch["log_probs"], batch["log_probs_length"], beam_size=100
+            )
             for i in range(len(batch["text"])):
                 argmax = batch["argmax"][i]
                 argmax = argmax[:int(batch["log_probs_length"][i])]
@@ -64,9 +67,7 @@ def main(config, out_file):
                     {
                         "ground_trurh": batch["text"][i],
                         "pred_text_argmax": text_encoder.ctc_decode(argmax),
-                        "pred_text_beam_search": text_encoder.ctc_beam_search(
-                            batch["probs"], batch["log_probs_length"], beam_size=100
-                        )[:10],
+                        "pred_text_beam_search": batch["beam_search_results"][i][:10],
                     }
                 )
     with Path(out_file).open("w") as f:
