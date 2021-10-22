@@ -110,3 +110,6 @@ wandb/
 .vscode/
 .idea/
 __MACOSX/
+
+# 3rd party
+ctcdecode/
