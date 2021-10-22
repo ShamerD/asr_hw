@@ -205,7 +205,6 @@ class Trainer(BaseTrainer):
             *args,
             **kwargs,
     ):
-        # TODO: implement logging of beam search results
         if self.writer is None:
             return
         argmax_inds = log_probs.cpu().argmax(-1)
@@ -215,18 +214,31 @@ class Trainer(BaseTrainer):
         ]
         argmax_texts_raw = [self.text_encoder.decode(inds) for inds in argmax_inds]
         argmax_texts = [self.text_encoder.ctc_decode(inds) for inds in argmax_inds]
-        tuples = list(zip(argmax_texts, text, argmax_texts_raw))
+
+        beam_search_results = self.text_encoder.ctc_beam_search(log_probs, log_probs_length, beam_size=100)
+        top_beam_search_results = [beams[:3] for beams in beam_search_results]
+
+        tuples = list(zip(argmax_texts, text, argmax_texts_raw, top_beam_search_results))
+
         shuffle(tuples)
         to_log_pred = []
         to_log_pred_raw = []
-        for pred, target, raw_pred in tuples[:examples_to_log]:
-            wer = calc_wer(target, pred) * 100
-            cer = calc_cer(target, pred) * 100
-            to_log_pred.append(
-                f"true: '{target}' | pred: '{pred}' "
-                f"| wer: {wer:.2f} | cer: {cer:.2f}"
-            )
-            to_log_pred_raw.append(f"true: '{target}' | pred: '{raw_pred}'")
+        for argmax_pred, target, argmax_raw_pred, top_beams in tuples[:examples_to_log]:
+            to_log_pred_raw.append(f"true: '{target}' | pred: '{argmax_raw_pred}'<br>")
+
+            argmax_wer = calc_wer(target, argmax_pred) * 100
+            argmax_cer = calc_cer(target, argmax_pred) * 100
+
+            log_string = f"true: '{target}'<br>" \
+                         f"argmax_pred: '{argmax_pred}' | wer: {argmax_wer:.2f} | cer: {argmax_cer:.2f}<br>"
+            for i, (beam_pred, beam_score) in enumerate(top_beams):
+                beam_wer = calc_wer(target, beam_pred)
+                beam_cer = calc_cer(target, beam_pred)
+
+                log_string += f"beam_{i+1}_pred: '{beam_pred}' | wer: {beam_wer:.2f} | cer: {beam_cer:.2f}<br>"
+
+            to_log_pred.append(log_string)
+
         self.writer.add_text(f"predictions", "<br>".join(to_log_pred))
         self.writer.add_text(
             f"predictions_raw", "<br>".join(to_log_pred_raw)
