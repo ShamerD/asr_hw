@@ -65,7 +65,7 @@ class CTCCharTextEncoder(CharTextEncoder):
             hypos = []
             for j in range(beam_size):
                 hypos.append(
-                    (self.ctc_decode(beam_results[i][j][:out_lens[0][i]]), beam_scores[i][j])
+                    (self.ctc_decode(beam_results[i][j][:out_lens[i][j]]), beam_scores[i][j])
                 )
             result.append(sorted(hypos, key=lambda x: x[1], reverse=True))
         return result
