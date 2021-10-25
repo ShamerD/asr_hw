@@ -36,4 +36,9 @@ class TestTextEncoder(unittest.TestCase):
         self.assertEqual(len(beam_search_results), 1)
         self.assertEqual(len(beam_search_results[0]), 3)
 
-        print(beam_search_results)
+        hypots = [x[0] for x in beam_search_results[0]]
+
+        # these have highest probability in hand calculation
+        self.assertIn('ab', hypots)
+        self.assertIn('b', hypots)
+        print("Beam search results: ", beam_search_results)
