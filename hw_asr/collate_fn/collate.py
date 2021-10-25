@@ -17,7 +17,7 @@ def collate_fn(dataset_items: List[dict]):
         raise ValueError("Trying to collate empty list")
 
     # make a dict of lists from list of dicts
-    # keys are ["audio", "spectrogram", "duration", "text", "text_encoded", "audio_path", "text_encoded_length",
+    # keys are ["audio", "spectrogram", "duration", "text", "text_encoded", "audio_path", "text_encoded_length"]
     dataset_dict = {}
     for dict_key in dataset_items[0]:
         dataset_dict[dict_key] = [dataset_item[dict_key] for dataset_item in dataset_items]
