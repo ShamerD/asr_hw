@@ -64,13 +64,15 @@
     {
       "type": "BeamSearchWERMetric",
       "args": {
-        "name": "WER (beam search)"
+        "name": "WER (beam search)",
+        "use_on_train": false
       }
     },
     {
       "type": "BeamSearchCERMetric",
       "args": {
-        "name": "CER (beam search)"
+        "name": "CER (beam search)",
+        "use_on_train": false
       }
     }
   ],

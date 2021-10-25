@@ -53,10 +53,10 @@ class Trainer(BaseTrainer):
         self.log_step = 10
 
         self.train_metrics = MetricTracker(
-            "loss", "grad norm", *[m.name for m in self.metrics], writer=self.writer
+            "loss", "grad norm", *[m.name for m in self.metrics if m.use_on_train], writer=self.writer
         )
         self.valid_metrics = MetricTracker(
-            "loss", *[m.name for m in self.metrics], writer=self.writer
+            "loss", *[m.name for m in self.metrics if m.use_on_val], writer=self.writer
         )
 
     @staticmethod
