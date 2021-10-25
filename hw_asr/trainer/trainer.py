@@ -233,8 +233,8 @@ class Trainer(BaseTrainer):
             log_string = f"true: '{target}'<br>" \
                          f"argmax_pred: '{argmax_pred}' | wer: {argmax_wer:.2f} | cer: {argmax_cer:.2f}<br>"
             for i, (beam_pred, beam_score) in enumerate(top_beams):
-                beam_wer = calc_wer(target, beam_pred)
-                beam_cer = calc_cer(target, beam_pred)
+                beam_wer = calc_wer(target, beam_pred) * 100
+                beam_cer = calc_cer(target, beam_pred) * 100
 
                 log_string += f"beam_{i+1}_pred: '{beam_pred}' | wer: {beam_wer:.2f} | cer: {beam_cer:.2f}<br>"
 
