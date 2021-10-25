@@ -15,7 +15,6 @@ class TestTextEncoder(unittest.TestCase):
         self.assertIn(decoded_text, true_text)
 
     def test_beam_search(self):
-        # TODO: (optional) write tests for beam search
         text_encoder = CTCCharTextEncoder.get_simple_alphabet()
         probs = torch.zeros((1, 3, len(text_encoder.char2ind)))
         probs.fill_(1e-7)

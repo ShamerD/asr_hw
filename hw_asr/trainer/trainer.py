@@ -6,6 +6,7 @@ import torch
 import torch.nn.functional as F
 from torch.nn.utils import clip_grad_norm_
 from torchvision.transforms import ToTensor
+import torchaudio
 from tqdm import tqdm
 
 from hw_asr.base import BaseTrainer
@@ -179,7 +180,7 @@ class Trainer(BaseTrainer):
             self._log_scalars(self.valid_metrics)
             self._log_predictions(part="val", **batch)
             self._log_spectrogram(batch["spectrogram"])
-            self._log_audio(batch["audio"])
+            self._log_audio(batch["audio"], batch["audio_path"])
 
         # add histogram of model parameters to the tensorboard
         for name, p in self.model.named_parameters():
@@ -249,9 +250,11 @@ class Trainer(BaseTrainer):
         image = PIL.Image.open(plot_spectrogram_to_buf(spectrogram.cpu().log()))
         self.writer.add_image("spectrogram", ToTensor()(image))
 
-    def _log_audio(self, audio_batch):
-        audio = random.choice(audio_batch)
-        self.writer.add_audio("audio", audio)
+    def _log_audio(self, audio_batch, audio_path_batch):
+        idx = random.randrange(len(audio_batch))
+        audio = audio_batch[idx]
+        t_info = torchaudio.info(str(audio_path_batch[idx]))
+        self.writer.add_audio("audio", audio, sample_rate=t_info.sample_rate)
 
     @torch.no_grad()
     def get_grad_norm(self, norm_type=2):
