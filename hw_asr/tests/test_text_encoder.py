@@ -1,5 +1,7 @@
 import unittest
 
+import torch
+
 from hw_asr.text_encoder.ctc_char_text_encoder import CTCCharTextEncoder
 
 
@@ -14,4 +16,24 @@ class TestTextEncoder(unittest.TestCase):
 
     def test_beam_search(self):
         # TODO: (optional) write tests for beam search
-        pass
+        text_encoder = CTCCharTextEncoder.get_simple_alphabet()
+        probs = torch.zeros((1, 3, len(text_encoder.char2ind)))
+        probs.fill_(1e-7)
+
+        probs[0][0][0] = 0.1
+        probs[0][0][1] = 0.5
+        probs[0][0][2] = 0.4
+
+        probs[0][1][0] = 0.2
+        probs[0][1][1] = 0.2
+        probs[0][1][2] = 0.6
+
+        probs[0][2][0] = 0.7
+        probs[0][2][1] = 0.1
+        probs[0][2][2] = 0.2
+
+        beam_search_results = text_encoder.ctc_beam_search(probs.log(), torch.tensor([3]))
+        self.assertEqual(len(beam_search_results), 1)
+        self.assertEqual(len(beam_search_results[0]), 3)
+
+        print(beam_search_results)

@@ -2,11 +2,17 @@
 
 ## Installation guide
 
-< Write your installation guide here >
+Install libraries
 
 ```shell
 pip install -r ./requirements.txt
+
+git clone --recursive https://github.com/parlance/ctcdecode.git
+cd ctcdecode && pip install 
 ```
+
+```ctcdecode``` can be somewhat painful to build on Windows (issues with compiling C++ code).
+However, on Linux there should be no problems.
 
 ## Recommended implementation order
 
