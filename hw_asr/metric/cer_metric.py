@@ -36,6 +36,6 @@ class BeamSearchCERMetric(BaseMetric):
         cers = []
         predictions = self.text_encoder.ctc_beam_search(log_probs, log_probs_length)
         for pred, target_text in zip(predictions, text):
-            pred_text = predictions[0][0]
+            pred_text = pred[0][0]
             cers.append(calc_cer(target_text, pred_text))
         return sum(cers) / len(cers)
