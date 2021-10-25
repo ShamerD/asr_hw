@@ -68,5 +68,6 @@ class CTCCharTextEncoder(CharTextEncoder):
                 hypos.append(
                     (self.ctc_decode(beam_results[i][j][:out_lens[i][j]]), -beam_scores[i][j])
                 )
-            result.append(sorted(hypos, key=lambda x: x[1], reverse=True))
+            # beams are already sorted
+            result.append(hypos)
         return result
