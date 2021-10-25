@@ -32,7 +32,7 @@ class TestTextEncoder(unittest.TestCase):
         probs[0][2][1] = 0.1
         probs[0][2][2] = 0.2
 
-        beam_search_results = text_encoder.ctc_beam_search(probs.log(), torch.tensor([3]))
+        beam_search_results = text_encoder.ctc_beam_search(probs.log(), torch.tensor([3]), beam_size=3)
         self.assertEqual(len(beam_search_results), 1)
         self.assertEqual(len(beam_search_results[0]), 3)
 
