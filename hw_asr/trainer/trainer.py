@@ -153,7 +153,8 @@ class Trainer(BaseTrainer):
 
         metrics.update("loss", batch["loss"].item())
         for met in self.metrics:
-            metrics.update(met.name, met(**batch))
+            if met in metrics.keys():
+                metrics.update(met.name, met(**batch))
         return batch
 
     def _valid_epoch(self, epoch):
