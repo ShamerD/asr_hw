@@ -57,7 +57,7 @@ class QuartzNetBlock(nn.Module):
 class QuartzNet(BaseModel):
     def __init__(self, n_feats, n_class):
         super().__init__(n_feats, n_class)
-        self.c1 = ConvBlock(n_feats, 256, kernel_size=33, stride=2)
+        self.c1 = TCSConv(n_feats, 256, kernel_size=33, stride=2, padding=16)
         self.blocks = nn.Sequential(
             QuartzNetBlock(256, 256, kernel_size=33),
             QuartzNetBlock(256, 256, kernel_size=39),
@@ -65,9 +65,9 @@ class QuartzNet(BaseModel):
             QuartzNetBlock(512, 512, kernel_size=63),
             QuartzNetBlock(512, 512, kernel_size=75)
         )
-        self.c2 = ConvBlock(512, 512, kernel_size=87)
+        self.c2 = TCSConv(512, 512, kernel_size=87, padding=86, dilation=2)
         self.c3 = ConvBlock(512, 1024, kernel_size=1)
-        self.c4 = ConvBlock(1024, n_class, kernel_size=1, dilation=2)
+        self.c4 = ConvBlock(1024, n_class, kernel_size=1)
 
     def forward(self, spectrogram, *args, **kwargs):
         x = self.c1(spectrogram)
