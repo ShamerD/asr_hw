@@ -153,7 +153,7 @@ class Trainer(BaseTrainer):
 
         metrics.update("loss", batch["loss"].item())
         for met in self.metrics:
-            if met in metrics.keys():
+            if met.name in metrics.keys():
                 metrics.update(met.name, met(**batch))
         return batch
 
