@@ -81,4 +81,4 @@ class QuartzNet(BaseModel):
         return {'logits': torch.transpose(x, -1, -2)}
 
     def transform_input_lengths(self, input_lengths):
-        return input_lengths
+        return torch.ceil(input_lengths / 2).type(torch.int32)
