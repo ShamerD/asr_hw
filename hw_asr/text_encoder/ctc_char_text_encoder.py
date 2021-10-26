@@ -54,19 +54,19 @@ class CTCCharTextEncoder(CharTextEncoder):
             cutoff_top_n=40,
             cutoff_prob=1.0,
             beam_width=beam_size,
-            num_processes=4,
+            num_processes=1,
             blank_id=self.char2ind[self.EMPTY_TOK],
             log_probs_input=True
         )
 
-        beam_results, beam_scores, timesteps, out_lens = decoder.decode(log_probs)
         result = []
-        for i in range(batch_size):
+        for log_probs_vec, log_probs_len in zip(log_probs, log_probs_length):
             hypos = []
+            beam_results, beam_scores, _, out_lens = decoder.decode(log_probs_vec[:log_probs_len].unsqueze(0))
             for j in range(beam_size):
                 # beam_score is -log(prob) in ctcdecode
                 hypos.append(
-                    (self.ctc_decode(beam_results[i][j][:min(out_lens[i][j], log_probs_length[i])]), -beam_scores[i][j])
+                    (self.ctc_decode(beam_results[0][j][:out_lens[0][j]]), -beam_scores[0][j])
                 )
             # beams are already sorted
             result.append(hypos)
