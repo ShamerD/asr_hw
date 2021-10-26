@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 from torch.nn import Sequential
 import torch.nn.functional as F
@@ -70,12 +71,14 @@ class QuartzNet(BaseModel):
         self.c4 = ConvBlock(1024, n_class, kernel_size=1)
 
     def forward(self, spectrogram, *args, **kwargs):
-        x = self.c1(spectrogram)
+        # spectrogram is [batch_size, time, n_feats] but conv expects [batch_size, n_feats, time]
+        x = torch.transpose(spectrogram, dim0=-1, dim1=-2)
+        x = self.c1(x)
         x = self.blocks(x)
         x = self.c2(x)
         x = self.c3(x)
         x = self.c4(x)
-        return {'logits': x}
+        return {'logits': torch.transpose(x, -1, -2)}
 
     def transform_input_lengths(self, input_lengths):
         return input_lengths
