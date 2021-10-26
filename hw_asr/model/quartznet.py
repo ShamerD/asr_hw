@@ -52,7 +52,7 @@ class QuartzNetBlock(nn.Module):
         )
 
     def forward(self, x):
-        F.relu(self.net(x) + self.residual(x))
+        return F.relu(self.net(x) + self.residual(x))
 
 
 class QuartzNet(BaseModel):
