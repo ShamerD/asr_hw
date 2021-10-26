@@ -19,7 +19,7 @@ class ConvBlock(nn.Module):
 
 
 class TCSConv(nn.Module):
-    def __init__(self, input_size, output_size, kernel_size, stride, padding, dilation=1, relu=True):
+    def __init__(self, input_size, output_size, kernel_size, padding, stride=1, dilation=1, relu=True):
         super().__init__()
         layers = [
             nn.Conv1d(input_size, output_size, kernel_size,
@@ -39,10 +39,10 @@ class QuartzNetBlock(nn.Module):
     def __init__(self, input_size, output_size, kernel_size, stride=1, repeats=5):
         super().__init__()
         padding = (kernel_size - 1) // 2
-        layers = [TCSConv(input_size, output_size, kernel_size, stride, padding=padding)]
+        layers = [TCSConv(input_size, output_size, kernel_size, padding=padding, stride=stride)]
         for i in range(1, repeats):
-            layers.append(TCSConv(output_size, output_size, kernel_size, stride,
-                                  padding=padding, relu=(i + 1 != repeats)))
+            layers.append(TCSConv(output_size, output_size, kernel_size,
+                                  padding=padding, stride=stride, relu=(i + 1 != repeats)))
 
         self.net = Sequential(*layers)
         self.residual = Sequential(
@@ -57,7 +57,7 @@ class QuartzNetBlock(nn.Module):
 class QuartzNet(BaseModel):
     def __init__(self, n_feats, n_class):
         super().__init__(n_feats, n_class)
-        self.c1 = TCSConv(n_feats, 256, kernel_size=33, stride=2, padding=16)
+        self.c1 = TCSConv(n_feats, 256, kernel_size=33, padding=16, stride=2)
         self.blocks = nn.Sequential(
             QuartzNetBlock(256, 256, kernel_size=33),
             QuartzNetBlock(256, 256, kernel_size=39),
