@@ -62,7 +62,7 @@ class CTCCharTextEncoder(CharTextEncoder):
         result = []
         for log_probs_vec, log_probs_len in zip(log_probs, log_probs_length):
             hypos = []
-            beam_results, beam_scores, _, out_lens = decoder.decode(log_probs_vec[:log_probs_len].unsqueze(0))
+            beam_results, beam_scores, _, out_lens = decoder.decode(log_probs_vec[:log_probs_len].unsqueeze(0))
             for j in range(beam_size):
                 # beam_score is -log(prob) in ctcdecode
                 hypos.append(
