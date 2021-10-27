@@ -12,6 +12,7 @@ from hw_asr.text_encoder.ctc_char_text_encoder import CTCCharTextEncoder
 from hw_asr.trainer import Trainer
 from hw_asr.utils import ROOT_PATH
 from hw_asr.utils.parse_config import ConfigParser
+from hw_asr.metric.utils import calc_wer, calc_cer
 
 DEFAULT_CHECKPOINT_PATH = ROOT_PATH / "default_test_model" / "checkpoint.pth"
 
@@ -42,6 +43,10 @@ def main(config, out_file):
     model.eval()
 
     results = []
+    cers = []
+    wers = []
+    cers_beam = []
+    wers_beam = []
 
     with torch.no_grad():
         for batch_num, batch in enumerate(tqdm(dataloaders["test"])):
@@ -61,15 +66,36 @@ def main(config, out_file):
                 batch["log_probs"], batch["log_probs_length"], beam_size=100
             )
             for i in range(len(batch["text"])):
+                ground_truth = batch["text"][i]
+
                 argmax = batch["argmax"][i]
                 argmax = argmax[:int(batch["log_probs_length"][i])]
+
+                pred_text_argmax = text_encoder.ctc_decode(argmax)
+                cers.append(calc_cer(ground_truth, pred_text_argmax))
+                wers.append(calc_wer(ground_truth, pred_text_argmax))
+
+                pred_top_beam = batch["beam_search_results"][i][0][0]
+                cers_beam.append(calc_cer(ground_truth, pred_top_beam))
+                wers_beam.append(calc_wer(ground_truth, pred_top_beam))
+
                 results.append(
                     {
-                        "ground_trurh": batch["text"][i],
+                        "ground_truth": batch["text"][i],
                         "pred_text_argmax": text_encoder.ctc_decode(argmax),
                         "pred_text_beam_search": batch["beam_search_results"][i][:10],
+                        "CER (argmax)": cers[-1],
+                        "WER (argmax)": wers[-1],
+                        "CER (beam-search)": cers_beam[-1],
+                        "WER (beam-search)": wers_beam[-1]
                     }
                 )
+
+    logger.info(f"CER (argmax): {100.0 * sum(cers) / len(cers):.2f}")
+    logger.info(f"WER (argmax): {100.0 * sum(wers) / len(wers):.2f}")
+    logger.info(f"CER (beam-search): {100.0 * sum(cers_beam) / len(cers_beam):.2f}")
+    logger.info(f"CER (beam-search): {100.0 * sum(wers_beam) / len(wers_beam):.2f}")
+
     with Path(out_file).open("w") as f:
         json.dump(results, f, indent=2)
 
