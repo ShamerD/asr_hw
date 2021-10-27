@@ -66,7 +66,7 @@ class CTCCharTextEncoder(CharTextEncoder):
             for j in range(beam_size):
                 # beam_score is -log(prob) in ctcdecode
                 hypos.append(
-                    (self.ctc_decode(beam_results[0][j][:out_lens[0][j]]), -beam_scores[0][j])
+                    (self.ctc_decode(beam_results[0][j][:out_lens[0][j]]), -beam_scores[0][j].item())
                 )
             # beams are already sorted
             result.append(hypos)
