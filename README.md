@@ -21,7 +21,7 @@ wget -q -O ./lm.arpa.gz http://www.openslr.org/resources/11/3-gram.pruned.1e-7.a
 gunzip ./lm.arpa.gz
 
 # load model from gdrive in your convenient way (manually or wget)
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1I_megQTMRjX51cAK1bihIQ8IRQcECZSs' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1I_megQTMRjX51cAK1bihIQ8IRQcECZSs" -O default_test/checkpoint.pth && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=14tFL0ylwPHDFWZDqlELCsSKl-U_ze6cC' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=14tFL0ylwPHDFWZDqlELCsSKl-U_ze6cC" -O default_test/checkpoint.pth && rm -rf /tmp/cookies.txt
 ```
 
 ## Notes
