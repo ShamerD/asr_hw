@@ -21,27 +21,8 @@ wget -q -O ./lm.arpa.gz http://www.openslr.org/resources/11/3-gram.pruned.1e-7.a
 gunzip ./lm.arpa.gz
 
 # load model from gdrive in your convenient way (manually or wget)
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1I_megQTMRjX51cAK1bihIQ8IRQcECZSs' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1I_megQTMRjX51cAK1bihIQ8IRQcECZSs" -O default_test/checkpoint.pth && rm -rf /tmp/cookies.txt
 ```
-
-## Before submitting
-
-0) Make sure your projects run on a new machine after complemeting installation guide
-1) Search project for `# TODO: your code here` and implement missing functionality
-2) Make sure all tests work without errors
-   ```shell
-   python -m unittest discover hw_asr/tests
-   ```
-3) Make sure `test.py` works fine and works as expected. You should create files `default_test_config.json` and your
-   installation guide should download your model checpoint and configs in `default_test_model/checkpoint.pth`
-   and `default_test_model/config.json`.
-   ```shell
-   python test.py \
-      -c default_test_config.json \
-      -r default_test_model/checkpoint.pth \
-      -t test_data \
-      -o test_result.json
-   ```
-4) Use `train.py` for training
 
 ## Notes
 

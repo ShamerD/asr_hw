@@ -131,22 +131,22 @@
     "type": "OneCycleLR",
     "args": {
       "steps_per_epoch": 500,
-      "epochs": 20,
+      "epochs": 1,
       "anneal_strategy": "cos",
       "max_lr": 4e-3,
       "pct_start": 0.2
     }
   },
   "trainer": {
-    "epochs": 65,
+    "epochs": 61,
     "save_dir": "saved/",
-    "save_period": 5,
+    "save_period": 1,
     "verbosity": 2,
     "monitor": "min val_loss",
     "early_stop": 100,
     "visualize": "wandb",
     "wandb_project": "asr_project",
-    "len_epoch": 1000,
+    "len_epoch": 500,
     "grad_norm_clip": 10
   }
 }
