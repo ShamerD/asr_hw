@@ -43,6 +43,11 @@ gunzip ./lm.arpa.gz
    ```
 4) Use `train.py` for training
 
+## Notes
+
+Unit tests can be broken in Datasphere due to PermissionErrors.
+Colab worked for me as expected (OK)
+
 ## Credits
 
 this repository is based on a heavily modified fork

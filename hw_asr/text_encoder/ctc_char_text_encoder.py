@@ -49,8 +49,8 @@ class CTCCharTextEncoder(CharTextEncoder):
         decoder = CTCBeamDecoder(
             self.alphabet,
             model_path=lm_path,
-            alpha=0,
-            beta=0,
+            alpha=0.5,
+            beta=1,
             cutoff_top_n=40,
             cutoff_prob=1.0,
             beam_width=beam_size,
