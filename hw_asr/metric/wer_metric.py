@@ -30,8 +30,7 @@ class BeamSearchWERMetric(BaseMetric):
     def __init__(self, text_encoder: CTCCharTextEncoder, use_lm=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.text_encoder = text_encoder
-        if use_lm:
-            self.lm_path = "./lm.arpa"
+        self.lm_path = "./lm.arpa" if use_lm else None
 
     def __call__(self, log_probs: Tensor, log_probs_length: Tensor, text: List[str], *args, **kwargs):
         wers = []

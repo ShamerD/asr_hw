@@ -8,7 +8,7 @@ Install libraries
 pip install -r ./requirements.txt
 
 git clone --recursive https://github.com/parlance/ctcdecode.git
-cd ctcdecode && pip install 
+pip install ./ctcdecode
 ```
 
 ```ctcdecode``` can be somewhat painful to build on Windows (issues with compiling C++ code).
