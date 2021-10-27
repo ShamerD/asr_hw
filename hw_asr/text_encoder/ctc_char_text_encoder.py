@@ -47,7 +47,7 @@ class CTCCharTextEncoder(CharTextEncoder):
         assert voc_size == len(self.ind2char)
 
         decoder = CTCBeamDecoder(
-            self.alphabet,
+            [c.upper() for c in self.alphabet],
             model_path=lm_path,
             alpha=0.5,
             beta=1,

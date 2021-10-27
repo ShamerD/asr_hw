@@ -63,7 +63,7 @@ def main(config, out_file):
             batch["probs"] = batch["log_probs"].exp().cpu()
             batch["argmax"] = batch["probs"].argmax(-1)
             batch["beam_search_results"] = text_encoder.ctc_beam_search(
-                batch["log_probs"], batch["log_probs_length"], beam_size=100
+                batch["log_probs"], batch["log_probs_length"], beam_size=100, lm_path='./lm.arpa'
             )
             for i in range(len(batch["text"])):
                 ground_truth = batch["text"][i]
