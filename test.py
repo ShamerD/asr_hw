@@ -94,7 +94,7 @@ def main(config, out_file):
     logger.info(f"CER (argmax): {100.0 * sum(cers) / len(cers):.2f}")
     logger.info(f"WER (argmax): {100.0 * sum(wers) / len(wers):.2f}")
     logger.info(f"CER (beam-search): {100.0 * sum(cers_beam) / len(cers_beam):.2f}")
-    logger.info(f"CER (beam-search): {100.0 * sum(wers_beam) / len(wers_beam):.2f}")
+    logger.info(f"WER (beam-search): {100.0 * sum(wers_beam) / len(wers_beam):.2f}")
 
     with Path(out_file).open("w") as f:
         json.dump(results, f, indent=2)
