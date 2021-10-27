@@ -115,15 +115,15 @@
   "lr_scheduler": {
     "type": "OneCycleLR",
     "args": {
-      "steps_per_epoch": 100,
-      "epochs": 5,
+      "steps_per_epoch": 500,
+      "epochs": 1,
       "anneal_strategy": "cos",
       "max_lr": 4e-3,
       "pct_start": 0.2
     }
   },
   "trainer": {
-    "epochs": 65,
+    "epochs": 61,
     "save_dir": "saved/",
     "save_period": 5,
     "verbosity": 2,
@@ -131,7 +131,7 @@
     "early_stop": 100,
     "visualize": "wandb",
     "wandb_project": "asr_project",
-    "len_epoch": 100,
+    "len_epoch": 500,
     "grad_norm_clip": 10
   }
 }
