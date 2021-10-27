@@ -38,7 +38,7 @@ class CTCCharTextEncoder(CharTextEncoder):
         return result
 
     def ctc_beam_search(self, log_probs: torch.Tensor, log_probs_length: torch.Tensor,
-                        beam_size: int = 100) -> List[List[Tuple[str, float]]]:
+                        beam_size: int = 100, lm_path=None) -> List[List[Tuple[str, float]]]:
         """
         Performs beam search and returns a list (batch) of lists of pairs (hypothesis, hypothesis probability).
         """
@@ -48,7 +48,7 @@ class CTCCharTextEncoder(CharTextEncoder):
 
         decoder = CTCBeamDecoder(
             self.alphabet,
-            model_path=None,
+            model_path=lm_path,
             alpha=0,
             beta=0,
             cutoff_top_n=40,

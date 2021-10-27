@@ -5,6 +5,7 @@ from torch import Tensor
 
 from hw_asr.base.base_metric import BaseMetric
 from hw_asr.base.base_text_encoder import BaseTextEncoder
+from hw_asr.text_encoder.ctc_char_text_encoder import CTCCharTextEncoder
 from hw_asr.metric.utils import calc_wer
 
 
@@ -26,15 +27,15 @@ class ArgmaxWERMetric(BaseMetric):
 
 
 class BeamSearchWERMetric(BaseMetric):
-    def __init__(self, text_encoder: BaseTextEncoder, *args, **kwargs):
+    def __init__(self, text_encoder: CTCCharTextEncoder, use_lm=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not hasattr(text_encoder, "ctc_beam_search"):
-            raise Exception("Encoder should implement 'ctc_beam_search' to track BeamSearch metrics")
         self.text_encoder = text_encoder
+        if use_lm:
+            self.lm_path = "./lm.arpa"
 
     def __call__(self, log_probs: Tensor, log_probs_length: Tensor, text: List[str], *args, **kwargs):
         wers = []
-        predictions = self.text_encoder.ctc_beam_search(log_probs, log_probs_length)
+        predictions = self.text_encoder.ctc_beam_search(log_probs, log_probs_length, lm_path=self.lm_path)
         for pred, target_text in zip(predictions, text):
             pred_text = pred[0][0]
             wers.append(calc_wer(target_text, pred_text))
